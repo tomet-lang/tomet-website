@@ -1,0 +1,116 @@
+---
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { renderDoc, siteRoot } from '../lib/docs';
+
+// The landing sample goes through the same `tomet html --body` path as
+// every documentation page: if the language changes under it, this page
+// changes with it rather than drifting into a screenshot of the past.
+const sampleFile = join(siteRoot, 'src', 'samples', 'hello.tmt');
+const sampleSource = readFileSync(sampleFile, 'utf8').trimEnd();
+const sampleHtml = renderDoc(sampleFile, { advanced: false });
+---
+
+<BaseLayout
+  title="Tomet — 人間にもパーサにも読める markup"
+  description="Tomet (.tmt) は、型付きデータと本文を同じファイルに置ける markup 言語と、その Rust ツールチェインです。"
+>
+  <div class="hero">
+    <h1>Tomet</h1>
+    <p class="tagline">
+      型付きのデータと、読める本文を、ひとつのファイルに。<br />
+      Markdown と JSON メタデータの代わりになる markup 言語と、その Rust ツールチェイン。
+    </p>
+
+    <div class="demo">
+      <div>
+        <h2>.tmt</h2>
+        <pre><code>{sampleSource}</code></pre>
+      </div>
+      <div>
+        <h2>出力</h2>
+        <div class="demo-render tmt-body" set:html={sampleHtml} />
+      </div>
+    </div>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h2>統一された要素記法</h2>
+      <p><code>@name(args)[content]&lbrace;value&rbrace;</code> ひとつで、属性・本文・構造化データを書き分けます。</p>
+      <ul>
+        <li>属性は <code>(args)</code></li>
+        <li>本文は <code>[content]</code></li>
+        <li>データは <code>&lbrace;value&rbrace;</code></li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>埋め込める形式</h2>
+      <p><code>format:</code> を添えれば、JSON / YAML / TOML をそのまま値として持てます。</p>
+      <ul>
+        <li>serde で読み書きできる</li>
+        <li>CommonMark と相互変換</li>
+        <li>Typst / Pandoc へも出力</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>道具が揃っている</h2>
+      <p>CLI・LSP・tree-sitter・エディタ拡張まで、ひと揃いあります。</p>
+      <ul>
+        <li>Helix / Neovim / VS Code / Zed</li>
+        <li><code>tomet</code> CLI とフォーマッタ</li>
+        <li>WebAssembly バインディング</li>
+      </ul>
+    </section>
+  </div>
+
+  <div class="cols">
+    <section>
+      <h2>読みはじめる</h2>
+      <p>ドキュメントはすべて <code>.tmt</code> で書かれ、このサイトも <code>tomet</code> 自身がレンダリングしています。</p>
+      <ul>
+        <li><a href="/docs/">ドキュメントの地図</a></li>
+        <li><a href="/docs/guide/cheatsheet">チートシート</a></li>
+        <li><a href="/docs/spec/syntax">文法仕様</a></li>
+        <li><a href="/docs/why/root">なぜこの形なのか</a></li>
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .demo {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
+    margin-top: 2.5rem;
+  }
+  .demo h2 {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+  .demo pre {
+    margin: 0;
+    height: 100%;
+  }
+  .demo-render {
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1.3rem;
+    background: var(--surface);
+    height: 100%;
+  }
+  .demo-render :global(h1) {
+    font-size: 1.4rem;
+    margin-top: 0;
+  }
+  .demo-render :global(h2) {
+    font-size: 1.05rem;
+  }
+</style>

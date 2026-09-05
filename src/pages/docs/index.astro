@@ -1,0 +1,43 @@
+---
+import { join } from 'node:path';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { docTitle, docToc, listDocs, renderDoc, repoRoot } from '../../lib/docs';
+
+const docs = listDocs();
+
+// `docs/README.tmt` is the map the repo's own AGENTS.md points contributors
+// at, so it is the natural landing page for the documentation section.
+const readme = join(repoRoot, 'docs', 'README.tmt');
+const html = renderDoc(readme);
+const title = docTitle(html, 'ドキュメント');
+const toc = docToc(html);
+---
+
+<BaseLayout title={`${title} — Tomet`} nav="docs">
+  <div class="layout">
+    <Sidebar docs={docs} current="" />
+
+    <main class="tmt-body">
+      <div class="page-meta"><code>docs/README.tmt</code></div>
+      <Fragment set:html={html} />
+    </main>
+
+    <nav class="toc">
+      {
+        toc.length > 0 && (
+          <>
+            <h2>このページ</h2>
+            <ul>
+              {toc.map((item) => (
+                <li class={`lvl-${item.level}`}>
+                  <a href={`#${item.id}`}>{item.text}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </nav>
+  </div>
+</BaseLayout>

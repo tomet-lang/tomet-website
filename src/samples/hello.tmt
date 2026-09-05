@@ -1,0 +1,19 @@
+@meta(format:yaml)+++
+title: リリースノート
+date: 2026-09-06
+tags: [ release, tomet ]
++++
+
+#[ リリースノート ]
+
+Tomet は @link("https://example.com/spec")[型付きのデータ] を、
+文書の本文と同じファイルに置ける記法です。
+
+##[ 変更点 ]
+
+- パーサの高速化
+- LSP の補完を改善
+
+@callout(type: note)[
+  メタデータは @meta が持ち、本文はそのまま本文として読めます。
+]

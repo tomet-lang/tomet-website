@@ -1,0 +1,74 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import {
+  docTitle,
+  docToc,
+  isDataOnly,
+  listDocs,
+  readDocSource,
+  renderDoc,
+} from '../../lib/docs';
+
+export function getStaticPaths() {
+  const docs = listDocs();
+  return docs.map((doc) => {
+    const html = renderDoc(doc.file);
+    return {
+      params: { slug: doc.slug },
+      props: { doc, html, docs },
+    };
+  });
+}
+
+const { doc, html, docs } = Astro.props;
+
+const fallbackTitle = doc.slug.split('/').pop() ?? doc.slug;
+const dataOnly = isDataOnly(html);
+const title = dataOnly ? fallbackTitle : docTitle(html, fallbackTitle);
+const toc = docToc(html);
+const source = dataOnly ? readDocSource(doc.file) : null;
+---
+
+<BaseLayout title={`${title} — Tomet`} nav="docs">
+  <div class="layout">
+    <Sidebar docs={docs} current={doc.slug} />
+
+    <main class="tmt-body">
+      <div class="page-meta">
+        <code>{doc.sourcePath}</code>
+      </div>
+
+      {
+        dataOnly && (
+          <div class="notice">
+            <p>
+              この文書はデータのみで構成されています。<code>@meta</code> や <code>@config</code>{' '}
+              のようなディレクティブは表示上の内容を持たないため、HTML
+              としての本文は空になります。ここでは <code>.tmt</code> の原文をそのまま示します。
+            </p>
+          </div>
+        )
+      }
+
+      {dataOnly ? <pre><code>{source}</code></pre> : <Fragment set:html={html} />}
+    </main>
+
+    <nav class="toc">
+      {
+        toc.length > 0 && (
+          <>
+            <h2>このページ</h2>
+            <ul>
+              {toc.map((item) => (
+                <li class={`lvl-${item.level}`}>
+                  <a href={`#${item.id}`}>{item.text}</a>
+                </li>
+              ))}
+            </ul>
+          </>
+        )
+      }
+    </nav>
+  </div>
+</BaseLayout>

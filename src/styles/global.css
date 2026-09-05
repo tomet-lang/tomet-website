@@ -1,0 +1,223 @@
+/*
+ * Site chrome plus a stylesheet for the `tm-*` classes that
+ * `tomet-convert-html` emits.
+ *
+ * The renderer's own `DEFAULT_STYLE` (used by `tomet html` without
+ * `--body`) still targets a `tmt-` prefix the renderer stopped emitting,
+ * so none of it applies. Everything below is written against the classes
+ * the renderer actually produces.
+ */
+
+:root {
+  --bg: #fbfbfa;
+  --surface: #ffffff;
+  --border: #e4e2dd;
+  --text: #21201c;
+  --muted: #6b6862;
+  --accent: #b0501f;
+  --accent-soft: #fdf3ec;
+  --code-bg: #f4f2ee;
+  --sans: ui-sans-serif, system-ui, "Hiragino Sans", "Noto Sans JP", sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", "JetBrains Mono", Menlo, monospace;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16151a;
+    --surface: #1d1c22;
+    --border: #302e37;
+    --text: #e8e6e3;
+    --muted: #9b978f;
+    --accent: #e58e5c;
+    --accent-soft: #2a1f18;
+    --code-bg: #22212a;
+  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--sans);
+  line-height: 1.75;
+  font-feature-settings: "palt";
+}
+
+a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 2px; }
+
+code, pre { font-family: var(--mono); }
+
+/* ---------- chrome ---------- */
+
+.site-header {
+  border-bottom: 1px solid var(--border);
+  background: var(--surface);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-header .inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0.85rem 1.25rem;
+  display: flex;
+  align-items: baseline;
+  gap: 1.5rem;
+}
+
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.brand em { color: var(--muted); font-style: normal; font-weight: 400; font-size: 0.85rem; margin-left: 0.6rem; }
+
+.site-header nav { display: flex; gap: 1.1rem; font-size: 0.9rem; }
+.site-header nav a { color: var(--muted); text-decoration: none; }
+.site-header nav a:hover, .site-header nav a[aria-current="true"] { color: var(--accent); }
+
+.layout {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 5rem;
+  display: grid;
+  grid-template-columns: 15rem minmax(0, 1fr) 13rem;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+@media (max-width: 1000px) {
+  .layout { grid-template-columns: minmax(0, 1fr); }
+  .toc { display: none; }
+  .sidebar { border-bottom: 1px solid var(--border); padding-bottom: 1.5rem; }
+}
+
+.sidebar { position: sticky; top: 4.5rem; font-size: 0.875rem; max-height: calc(100vh - 6rem); overflow-y: auto; }
+.sidebar h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin: 1.5rem 0 0.4rem; }
+.sidebar h2:first-child { margin-top: 0; }
+.sidebar ul { list-style: none; margin: 0; padding: 0; }
+.sidebar li { margin: 0.1rem 0; }
+.sidebar a { display: block; padding: 0.2rem 0.5rem; border-radius: 5px; color: var(--muted); text-decoration: none; }
+.sidebar a:hover { background: var(--code-bg); color: var(--text); }
+.sidebar a[aria-current="page"] { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
+.sidebar .nested { padding-left: 0.75rem; }
+
+.toc { position: sticky; top: 4.5rem; font-size: 0.8rem; }
+.toc h2 { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin: 0 0 0.5rem; }
+.toc ul { list-style: none; margin: 0; padding: 0; }
+.toc a { color: var(--muted); text-decoration: none; display: block; padding: 0.15rem 0; }
+.toc a:hover { color: var(--accent); }
+.toc .lvl-3 { padding-left: 0.8rem; }
+
+.page-meta { color: var(--muted); font-size: 0.8rem; margin-bottom: 1.5rem; display: flex; gap: 0.6rem; align-items: center; }
+.page-meta code { background: var(--code-bg); padding: 0.1rem 0.4rem; border-radius: 4px; }
+
+.notice {
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 0.8rem 1rem;
+  border-radius: 6px;
+  font-size: 0.875rem;
+  margin: 0 0 1.5rem;
+}
+.notice p { margin: 0; }
+
+/* ---------- rendered .tmt body ---------- */
+
+.tmt-body { min-width: 0; }
+.tmt-body h1 { font-size: 1.9rem; line-height: 1.35; margin: 0 0 1.2rem; letter-spacing: 0.01em; }
+.tmt-body h2 { font-size: 1.35rem; margin: 2.6rem 0 0.8rem; padding-bottom: 0.3rem; border-bottom: 1px solid var(--border); }
+.tmt-body h3 { font-size: 1.1rem; margin: 2rem 0 0.6rem; }
+.tmt-body h4, .tmt-body h5, .tmt-body h6 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+.tmt-body p { margin: 0 0 1rem; }
+.tmt-body ul, .tmt-body ol { padding-left: 1.4rem; margin: 0 0 1rem; }
+.tmt-body li { margin: 0.2rem 0; }
+
+.tmt-body pre {
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.9rem 1.1rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+.tmt-body :not(pre) > code {
+  background: var(--code-bg);
+  border-radius: 4px;
+  padding: 0.1rem 0.35rem;
+  font-size: 0.87em;
+}
+
+.tmt-body table, .tmt-body .tm-table {
+  border-collapse: collapse;
+  width: 100%;
+  display: block;
+  overflow-x: auto;
+  font-size: 0.9rem;
+  margin: 0 0 1.2rem;
+}
+.tmt-body th, .tmt-body td { border: 1px solid var(--border); padding: 0.4rem 0.7rem; text-align: left; }
+.tmt-body th { background: var(--code-bg); font-weight: 600; }
+
+/* Heading numbers: `--advanced` wraps the `1.2.1` label in this span. */
+.tm-heading-number { color: var(--muted); margin-right: 0.5em; font-weight: 400; font-variant-numeric: tabular-nums; }
+
+/* A titled thematic break: `--- Title ---` in the source. */
+.tm-hr-titled { display: flex; align-items: center; gap: 0.75rem; margin: 2rem 0 1rem; color: var(--muted); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; }
+.tm-hr-titled hr { flex: 1; margin: 0; border: 0; border-top: 1px solid var(--border); }
+
+/* The generic element fallback: any `<T>`/`@name` with no fixed meaning. */
+.tm-element { border-left: 2px solid var(--border); padding-left: 0.6rem; display: inline-block; }
+.tm-children { display: block; }
+
+.tm-caution { border-left: 3px solid #d9822b; background: rgba(217, 130, 43, 0.08); padding: 0.7rem 1rem; border-radius: 0 6px 6px 0; margin: 0 0 1rem; }
+
+.tm-links { margin: 0 0 1rem; }
+.tm-links dt { font-weight: 600; margin-top: 0.6rem; }
+.tm-links dd { margin: 0 0 0 1rem; color: var(--muted); }
+
+.tm-value { color: var(--muted); font-family: var(--mono); font-size: 0.85em; }
+.tm-interp { color: var(--accent); font-family: var(--mono); font-size: 0.85em; }
+.tm-id { color: var(--muted); font-family: var(--mono); font-size: 0.8em; }
+.tm-raw { white-space: pre-wrap; }
+.tm-list-marker { color: var(--muted); margin-right: 0.35em; }
+.tm-file, .tm-url { text-decoration: none; border-bottom: 1px solid currentColor; }
+.tm-icon { display: inline-block; width: 1em; height: 1em; vertical-align: -0.125em; }
+.tm-deck { display: grid; gap: 0.8rem; grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr)); margin: 0 0 1.2rem; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 0.9rem 1rem; background: var(--surface); }
+
+/* ---------- landing ---------- */
+
+.hero { max-width: 1180px; margin: 0 auto; padding: 4.5rem 1.25rem 2rem; }
+.hero h1 { font-size: 2.9rem; margin: 0 0 0.4rem; letter-spacing: -0.01em; }
+.hero .tagline { color: var(--muted); font-size: 1.15rem; margin: 0 0 2rem; }
+.hero pre { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1.3rem; overflow-x: auto; font-size: 0.85rem; line-height: 1.65; }
+
+.cols { max-width: 1180px; margin: 0 auto; padding: 1rem 1.25rem 5rem; display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr)); }
+.cols section { border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem 1.3rem; background: var(--surface); }
+.cols h2 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+.cols p { margin: 0 0 0.8rem; color: var(--muted); font-size: 0.9rem; }
+.cols ul { margin: 0; padding-left: 1.1rem; font-size: 0.9rem; }
+
+/* `@callout(type: ...)` renders as a generic element div with a data-type. */
+.tm-callout {
+  display: block;
+  border-left: 3px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 0.7rem 1rem;
+  border-radius: 0 6px 6px 0;
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+}
+.tm-callout[data-type="warning"], .tm-callout[data-type="caution"] {
+  border-left-color: #d9822b;
+  background: rgba(217, 130, 43, 0.08);
+}

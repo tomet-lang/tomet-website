@@ -1,0 +1,42 @@
+---
+import { SECTIONS, type DocEntry } from '../lib/docs';
+
+interface Props {
+  docs: DocEntry[];
+  current?: string;
+}
+
+const { docs, current } = Astro.props;
+
+/** `guide/builtins/args` -> `builtins / args`, for a readable nav label. */
+function label(slug: string, section: string): string {
+  return slug.slice(section.length + 1).split('/').join(' / ');
+}
+---
+
+<aside class="sidebar">
+  <h2>はじめに</h2>
+  <ul>
+    <li><a href="/docs/" aria-current={current === '' ? 'page' : undefined}>ドキュメントの地図</a></li>
+  </ul>
+  {
+    SECTIONS.map((section) => {
+      const entries = docs.filter((d) => d.section === section.dir);
+      if (entries.length === 0) return null;
+      return (
+        <>
+          <h2>{section.label}</h2>
+          <ul>
+            {entries.map((d) => (
+              <li class={d.slug.split('/').length > 2 ? 'nested' : undefined}>
+                <a href={`/docs/${d.slug}`} aria-current={d.slug === current ? 'page' : undefined}>
+                  {label(d.slug, section.dir)}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </>
+      );
+    })
+  }
+</aside>

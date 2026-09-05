@@ -1,0 +1,34 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Which top-level nav entry to mark as current. */
+  nav?: string;
+}
+
+const { title, description, nav } = Astro.props;
+---
+
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    {description && <meta name="description" content={description} />}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><text y='13' font-size='14'>📖</text></svg>" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="inner">
+        <a class="brand" href="/">Tomet<em>Tome to me!!</em></a>
+        <nav>
+          <a href="/docs/" aria-current={nav === 'docs' ? 'true' : undefined}>ドキュメント</a>
+          <a href="/docs/guide/cheatsheet">チートシート</a>
+        </nav>
+      </div>
+    </header>
+    <slot />
+  </body>
+</html>
