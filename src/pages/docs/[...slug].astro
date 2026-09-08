@@ -1,46 +1,42 @@
 ---
+import { getCollection } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
-import {
-  docTitle,
-  docToc,
-  isDataOnly,
-  listDocs,
-  readDocSource,
-  renderDoc,
-} from '../../lib/docs';
 
-export function getStaticPaths() {
-  const docs = listDocs();
-  return docs.map((doc) => {
-    const html = renderDoc(doc.file);
-    return {
-      params: { slug: doc.slug },
-      props: { doc, html, docs },
-    };
-  });
+export async function getStaticPaths() {
+  const allDocs = await getCollection('docs');
+  const contentDocs = allDocs.filter((entry) => entry.id !== 'README');
+
+  // Map docs list for sidebar navigation
+  const docs = contentDocs.map((entry) => ({
+    slug: entry.data.slug,
+    section: entry.data.section,
+    sourcePath: entry.data.sourcePath,
+  }));
+
+  return contentDocs.map((entry) => ({
+    params: { slug: entry.id },
+    props: { entry, docs },
+  }));
 }
 
-const { doc, html, docs } = Astro.props;
-
-const fallbackTitle = doc.slug.split('/').pop() ?? doc.slug;
-const dataOnly = isDataOnly(html);
-const title = dataOnly ? fallbackTitle : docTitle(html, fallbackTitle);
-const toc = docToc(html);
-const source = dataOnly ? readDocSource(doc.file) : null;
+const { entry, docs } = Astro.props;
+const { title, sourcePath, toc, isDataOnly } = entry.data;
+const html = entry.rendered?.html ?? '';
+const source = isDataOnly ? entry.body : null;
 ---
 
 <BaseLayout title={`${title} — Tomet`} nav="docs">
   <div class="layout">
-    <Sidebar docs={docs} current={doc.slug} />
+    <Sidebar docs={docs as any} current={entry.id} />
 
     <main class="tmt-body">
       <div class="page-meta">
-        <code>{doc.sourcePath}</code>
+        <code>{sourcePath}</code>
       </div>
 
       {
-        dataOnly && (
+        isDataOnly && (
           <div class="notice">
             <p>
               この文書はデータのみで構成されています。<code>@meta</code> や <code>@config</code>{' '}
@@ -51,7 +47,7 @@ const source = dataOnly ? readDocSource(doc.file) : null;
         )
       }
 
-      {dataOnly ? <pre><code>{source}</code></pre> : <Fragment set:html={html} />}
+      {isDataOnly ? <pre><code>{source}</code></pre> : <Fragment set:html={html} />}
     </main>
 
     <nav class="toc">
@@ -60,7 +56,7 @@ const source = dataOnly ? readDocSource(doc.file) : null;
           <>
             <h2>このページ</h2>
             <ul>
-              {toc.map((item) => (
+              {toc.map((item: { id: string; level: number; text: string }) => (
                 <li class={`lvl-${item.level}`}>
                   <a href={`#${item.id}`}>{item.text}</a>
                 </li>

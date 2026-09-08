@@ -5,14 +5,14 @@ it is produced by the `tomet` CLI at build time.
 
 ## How it works
 
-`src/lib/docs.ts` is the whole content pipeline. It walks `../tomet/docs`,
-shells out to `tomet html --body --advanced` for each document, and hands
-the HTML fragment to Astro. There is no JavaScript-side `.tmt` parser here
-on purpose: `tomet-convert-html` is the source of truth, and a second
-implementation would drift from it.
+`src/content.config.ts` defines the documentation content collection using
+`tometLoader` from `@tomet/astro`. It loads `.tmt` documents and renders
+them in-process using `@tomet/tomet-wasm` (backed directly by `tomet-convert-html`).
+There is no JavaScript-side `.tmt` parser here on purpose: `tomet-convert-html`
+is the source of truth, and a second implementation would drift from it.
 
-That means the site is a live test of the renderer. A document that renders
-badly here renders badly everywhere.
+Astro 5's Content Layer caching (`digest`) ensures that only modified documents
+are re-rendered on incremental builds, easily scaling to tens of thousands of files.
 
 ## Running it
 

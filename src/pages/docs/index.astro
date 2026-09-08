@@ -1,22 +1,28 @@
 ---
-import { join } from 'node:path';
+import { getCollection, getEntry } from 'astro:content';
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Sidebar from '../../components/Sidebar.astro';
-import { docTitle, docToc, listDocs, renderDoc, repoRoot } from '../../lib/docs';
 
-const docs = listDocs();
+const allDocs = await getCollection('docs');
+const docs = allDocs
+  .filter((entry) => entry.id !== 'README')
+  .map((entry) => ({
+    slug: entry.data.slug,
+    section: entry.data.section,
+    sourcePath: entry.data.sourcePath,
+  }));
 
 // `docs/README.tmt` is the map the repo's own AGENTS.md points contributors
 // at, so it is the natural landing page for the documentation section.
-const readme = join(repoRoot, 'docs', 'README.tmt');
-const html = renderDoc(readme);
-const title = docTitle(html, 'ドキュメント');
-const toc = docToc(html);
+const landing = await getEntry('docs', 'README');
+const html = landing?.rendered?.html ?? '';
+const title = landing?.data?.title ?? 'ドキュメント';
+const toc = landing?.data?.toc ?? [];
 ---
 
 <BaseLayout title={`${title} — Tomet`} nav="docs">
   <div class="layout">
-    <Sidebar docs={docs} current="" />
+    <Sidebar docs={docs as any} current="" />
 
     <main class="tmt-body">
       <div class="page-meta"><code>docs/README.tmt</code></div>
@@ -29,7 +35,7 @@ const toc = docToc(html);
           <>
             <h2>このページ</h2>
             <ul>
-              {toc.map((item) => (
+              {toc.map((item: { id: string; level: number; text: string }) => (
                 <li class={`lvl-${item.level}`}>
                   <a href={`#${item.id}`}>{item.text}</a>
                 </li>
