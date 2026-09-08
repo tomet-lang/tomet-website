@@ -60,17 +60,10 @@ There is no package output. The site is a `dist/` that someone serves, not
 something anyone installs, so `npm run build` is the build and Nix only
 supplies the tools.
 
-The `tomet` input is here for the two things that do need a binary: the
-renderer in the shell, and `tomet format` for the `.tmt` files in this
-repo. `src/lib/docs.ts` still prefers a working copy's
-`../tomet/target/release/tomet` over the pinned one, so changing the
-language and reloading the site stay a single loop. `TOMET_REPO` and
-`TOMET_BIN` override both.
-
-One wrinkle worth knowing: the pinned `tomet` will not have `--body` until
-that change is committed and pushed, so a fresh clone with no working-copy
-build cannot render pages yet. A `cargo build --release --bin tomet` in
-`../tomet` is the way through until then.
+The `tomet` input is here for tooling: the renderer in the shell, and
+`tomet format` for the `.tmt` files in this repo. Site rendering itself is
+performed in-process via `@tomet/astro` and `@tomet/tomet-wasm`.
+`TOMET_REPO` can still be set to point at an alternate Tomet repository.
 
 ## Known gaps
 

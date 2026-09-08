@@ -20,4 +20,10 @@ export const collections = {
       },
     }),
   }),
+  samples: defineCollection({
+    loader: tometLoader({
+      base: resolve(process.cwd(), 'src', 'samples'),
+      advanced: false,
+    }),
+  }),
 };

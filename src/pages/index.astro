@@ -1,15 +1,16 @@
 ---
+import { getEntry } from 'astro:content';
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
-import { renderDoc, siteRoot } from '../lib/docs';
 
-// The landing sample goes through the same `tomet html --body` path as
+// The landing sample goes through the same Astro Content Layer pipeline as
 // every documentation page: if the language changes under it, this page
 // changes with it rather than drifting into a screenshot of the past.
-const sampleFile = join(siteRoot, 'src', 'samples', 'hello.tmt');
+const sampleFile = join(process.cwd(), 'src', 'samples', 'hello.tmt');
 const sampleSource = readFileSync(sampleFile, 'utf8').trimEnd();
-const sampleHtml = renderDoc(sampleFile, { advanced: false });
+const sampleEntry = await getEntry('samples', 'hello');
+const sampleHtml = sampleEntry?.rendered?.html ?? '';
 ---
 
 <BaseLayout
