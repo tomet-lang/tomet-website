@@ -1,0 +1,16 @@
+Soft break	\n	改行しているだけ。文章は続く
+Hard break	\n\n など	段落・ブロックが終わる
+Hard line break	特殊記法	同じ段落内で強制改行
+文字としての改行
+文章構造としての改行
+表示上の改行
+LineBreak 表示上の改行
+@table
+|[ type      ][ alias               ][ description ]
+|[ linebreak ][ hardbreak           ][             ]
+|[ glue      ][ softbreak, softline ][             ]
+
+#[ 他言語の実装 ]
+
+- pandoc
+  - SofBreakとして残される。

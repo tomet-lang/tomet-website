@@ -7,7 +7,7 @@
     treefmt-nix.url = "github:numtide/treefmt-nix";
 
     #[ Dev ]
-    tomet.url = "git+https://github.com/tomet-lang/tomet.git";
+    tomet.url = "github:tomet-lang/tomet";
   };
 
   outputs = inputs: import ./nix inputs;
