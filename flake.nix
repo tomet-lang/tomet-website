@@ -6,8 +6,12 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     treefmt-nix.url = "github:numtide/treefmt-nix";
 
-    #[ Dev ]
+    #[ Tool ]
     tomet.url = "github:tomet-lang/tomet";
+    twrit = {
+      url = "github:tomet-lang/tomet-writ";
+      inputs.tomet.follows = "tomet";
+    };
   };
 
   outputs = inputs: import ./nix inputs;

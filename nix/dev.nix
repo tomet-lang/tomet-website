@@ -3,16 +3,18 @@
   mkShell,
 
   tomet,
+  twrit,
   ...
 }:
 mkShell {
   buildInputs = with pkgs; [
     tomet
+    twrit
 
     nodejs
   ];
 
   shellHook = ''
-    echo "📖 Tomet website -- npm install && npm run dev"
+    echo "📖 Tomet"
   '';
 }

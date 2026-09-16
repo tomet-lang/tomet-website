@@ -14,14 +14,14 @@ flake-parts.lib.mkFlake { inherit inputs; } {
 
   perSystem =
     { pkgs, ... }:
-    let
-      tomet = inputs.tomet.packages.${pkgs.system}.tomet;
-    in
     {
       devShells.default = pkgs.callPackage ./dev.nix {
-        inherit tomet;
+        tomet = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet;
+        twrit = inputs.twrit.packages.${pkgs.stdenv.hostPlatform.system}.twrit;
       };
 
-      treefmt = import ./formatter.nix { inherit tomet; };
+      treefmt = import ./formatter.nix {
+        tomet = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet;
+      };
     };
 }
