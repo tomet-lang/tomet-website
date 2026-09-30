@@ -2,15 +2,15 @@
 {
   projectRootFile = "flake.nix";
   programs = {
-    #[ Nix ]
+    #= Nix
     nixfmt.enable = true;
     statix.enable = true;
     deadnix.enable = true;
-    #[ Shell ]
+    #= Shell
     shfmt.enable = true;
     shellcheck.enable = true;
 
-    #[ Web ]
+    #= Web
     prettier.enable = true;
   };
   settings = {

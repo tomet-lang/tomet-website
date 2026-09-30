@@ -10,7 +10,11 @@ LineBreak 表示上の改行
 |[ linebreak ][ hardbreak           ][             ]
 |[ glue      ][ softbreak, softline ][             ]
 
-#[ 他言語の実装 ]
+=[ 他言語の実装 ]
 
 - pandoc
   - SofBreakとして残される。
+
+=[ 草案 ]
+
+- `;`と`¶`で、空行無しで書けるようにする。

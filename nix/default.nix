@@ -17,6 +17,7 @@ flake-parts.lib.mkFlake { inherit inputs; } {
     {
       devShells.default = pkgs.callPackage ./dev.nix {
         tomet = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet;
+        tomet-lsp = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet-lsp;
         twrit = inputs.twrit.packages.${pkgs.stdenv.hostPlatform.system}.twrit;
       };
 
