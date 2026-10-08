@@ -1,3 +1,51 @@
-- Astro
-- Svelte
-- Tomet
+@config(
+  export: {
+    type: commonmark,
+    path: "README.md"
+  }
+)
+@meta{
+  id: doc-readme,
+  lang: en
+}
+
+${macro.generated_by(self.path)}
+
+=[ Tomet Website ]
+
+The official documentation portal and marketing website for the @link[Tomet](https://github.com/tomet-lang/tomet) language.
+
+==[ Architecture & How It Works ]
+
+Built with **Astro 5** and `@tomet/astro`.
+The documentation content collection loads `.tmt` source documents and renders them directly using `@tomet/tomet-wasm` (backed by `tomet-convert-html`).
+There is no separate JavaScript `.tmt` parser; the Rust-compiled Wasm engine remains the authoritative source of truth.
+
+Astro 5's Content Layer caching (`digest`) guarantees that only modified documents are re-rendered on incremental builds, scaling smoothly to tens of thousands of pages.
+
+==[ Development ]
+
+=== Prerequisites
+- Node.js (via Nix or local environment)
+- Tomet toolchain (`tomet` CLI)
+- Or use Nix: `nix develop`
+
+=== Run development server
+```bash
+npm install
+npm run dev
+```
+
+=== Build static site
+```bash
+npm run build
+npm run preview
+```
+
+==[ Published Content ]
+
+The site serves documentation from:
+-| `docs/guide`: User tutorials and comprehensive guides.
+-| `docs/spec`: Formal syntax and semantics specification.
+-| `docs/examples`: Real-world document examples.
+-| `docs/why`: Design rationale, architectural ethos, and background.
