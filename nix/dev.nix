@@ -14,8 +14,9 @@ mkShell {
     tomet-lsp
     twrit
     just
+    deno
 
-    #= Web
+    #= Runtime
     nodejs
   ];
 

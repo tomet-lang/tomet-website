@@ -14,10 +14,11 @@
     prettier.enable = true;
   };
   settings = {
+    # https://github.com/numtide/treefmt-nix/issues/171
     global.excludes = [
       "dist/*"
       "package-lock.json"
-    ]; # https://github.com/numtide/treefmt-nix/issues/171
+    ];
 
     formatter = {
       tomet = {

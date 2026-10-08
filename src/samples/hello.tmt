@@ -1,12 +1,12 @@
 @meta{
   title: リリースノート
   date: 2026-09-06
-  tags: [ release, tomet ]
+  tags: list( release, tomet )
 }
 
 =[ リリースノート ]
 
-Tomet は @link("https://example.com/spec")[型付きのデータ] を、
+Tomet は @link[型付きのデータ]("https://example.com/spec") を、
 文書の本文と同じファイルに置ける記法です。
 
 ==[ 変更点 ]

@@ -5,6 +5,7 @@ Hard line break	特殊記法	同じ段落内で強制改行
 文章構造としての改行
 表示上の改行
 LineBreak 表示上の改行
+
 @table
 |[ type      ][ alias               ][ description ]
 |[ linebreak ][ hardbreak           ][             ]
