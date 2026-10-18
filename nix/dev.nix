@@ -2,17 +2,13 @@
   pkgs,
   mkShell,
 
-  tomet,
-  tomet-lsp,
-  twrit,
+  tools,
   ...
 }:
 mkShell {
   buildInputs = with pkgs; [
     #= Develop
-    tomet
-    tomet-lsp
-    twrit
+    tools
     just
     deno
 

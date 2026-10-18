@@ -14,15 +14,22 @@ flake-parts.lib.mkFlake { inherit inputs; } {
 
   perSystem =
     { pkgs, ... }:
+    let
+      system = pkgs.stdenv.hostPlatform.system;
+      sisho = inputs.sisho.packages.${system};
+      sishoLib = inputs.sisho.legacyPackages.${system};
+    in
     {
       devShells.default = pkgs.callPackage ./dev.nix {
-        tomet = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet;
-        tomet-lsp = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet-lsp;
-        twrit = inputs.twrit.packages.${pkgs.stdenv.hostPlatform.system}.twrit;
+        # sisho, tomet and twrit, with the language server.
+        tools = sishoLib.combine [
+          sisho.toolchain
+          sisho.tomet-lsp
+        ];
       };
 
       treefmt = import ./formatter.nix {
-        tomet = inputs.tomet.packages.${pkgs.stdenv.hostPlatform.system}.tomet;
+        tomet = sisho.tomet;
       };
     };
 }

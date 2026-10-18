@@ -15,8 +15,8 @@
     };
 
     #= Tool
-    tomet.url = "github:tomet-lang/tomet";
-    twrit.url = "github:tomet-lang/tomet-writ";
+    # sisho brings tomet and twrit.
+    sisho.url = "github:tomet-lang/sisho";
   };
 
   outputs = inputs: import ./nix inputs;
